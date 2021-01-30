@@ -4,6 +4,7 @@ Initial thoughts include planning out how we are going to retrieve data, both ab
 
 2. Discuss what development methodology you will use and why? (2 points)
 We chose to go with the waterfall model. This is not a big project so using a simple model can simplify things. Also with the way the assignemnts are structured it goes well with
-the waterfall model.
+the waterfall model. The components that are must be included in the software gives us an idea of what the application must consist of when the user attemps to use it. 
 
 3. Provide high level design / architecture of your solution that you are proposing? (6 points)
+We decided to model the software using the Activity Diagram because operation that the user uses can become a new activity that will continue to go into another activity until the user is finished using the software.
