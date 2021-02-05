@@ -8,3 +8,5 @@ the waterfall model. The components that are must be included in the software gi
 
 3. Provide high level design / architecture of your solution that you are proposing? (6 points)
 We decided to model the software using the Activity Diagram because operation that the user uses can become a new activity that will continue to go into another activity until the user is finished using the software.
+
+Who did what: We all came up with the answers together an Nathan drew the UML diagram.
