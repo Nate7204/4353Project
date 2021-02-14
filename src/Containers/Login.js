@@ -5,7 +5,7 @@ import {useHistory} from "react-router-dom"
 import "./Login.css"
 
 export default function Login(){
-    const [username, setUsername] = useState("")
+    const [username, setUsername] = useState("")    //useState("") initializes username and setUsername
     const [password, setPassword] = useState("")
     var history = useHistory()
 
@@ -17,8 +17,8 @@ export default function Login(){
 
     }
 
-    const registerSubmit = (e) =>{
-        history.push("/Signup")
+    const registerSubmit = (e) =>{  //function that happens when Register button is pressed
+        history.push("/Signup")     //links to Signup.js    must add the link to App.js
     }
 
     return (
