@@ -11,7 +11,7 @@ export default function NavBar(){
     }
 
     const formSubmit = (e) =>{          //FIXME: change to form
-        history.push("/WelcomePage")
+        history.push("/Fuel")
     }
 
     const historySubmit = (e) =>{     
