@@ -136,7 +136,7 @@ const [FullName, setFullname] = useState("")
                 <label>Zip Code</label>
                 <input type="text" placeholder="Enter Zip Code" id="ZipCode"></input>
                 
-                <button type="button">Submit</button>
+                <button type="submit">Submit</button>
             </form>
         </div>
             )
