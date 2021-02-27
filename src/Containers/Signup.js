@@ -7,7 +7,7 @@ import './Signup.css'
 export default function Signup(){
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
-    const [confirmPassword, setConfirmPassword] = useState()
+    const [confirmPassword, setConfirmPassword] = useState("")
     var history = useHistory()
 
     function validLength(){
@@ -15,7 +15,22 @@ export default function Signup(){
     }
 
     function handleSubmit(event){
-        history.push("/")
+        event.preventDefault()
+
+        if(validLength()){
+            history.push("/")
+        }
+        else{
+            if(username.length === 0){
+                alert("You must have a username")
+            }
+            else if(password.length === 0){
+                alert("You must have a password")
+            }
+            else if(password !== confirmPassword){
+                alert("Passwords must match")
+            }
+        }
     }
 
     return(
@@ -47,7 +62,7 @@ export default function Signup(){
             onChange={(e) => setConfirmPassword(e.target.value)}
             />
         </Form.Group>
-        <Button className="register" block size="lg" type="submit" disabled={!validLength()}>
+        <Button className="register" block size="lg" type="submit">
             Register
         </Button>
         </Form>
