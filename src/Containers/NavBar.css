@@ -1,0 +1,11 @@
+@media all and (min-width: 480px){
+  .NavBar{
+    margin: 0 auto;
+  }
+  .NavBar header{
+   text-align: center;
+  }
+  button{
+    margin-left: 20px;
+  }
+}
