@@ -1,20 +1,16 @@
 import React, {useState} from "react"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
-import { useHistory } from "react-router-dom"
 import './Fuel.css'
 
 export default function Fuel(){
     const [gallons, setGallons] = useState("")
     const [date, setDate] = useState("")
 
-    function handleSubmit(event) {
-        history.push("/")
-    }
         return (
             <div className="Login">
                 <h1>Quote Page</h1>
-                <Form onSubmit={handleSubmit}>
+                <Form>
                     <Form.Group size="lg" controlId="gallons">
                         <Form.Label>Gallons</Form.Label>
                         <Form.Control
@@ -36,8 +32,8 @@ export default function Fuel(){
                             />
                     </Form.Group>
                     <p>Suggested Price: NaN</p>
-                    <p>Total Due: Nan</p>
-                    <Button className="register" block size="lg" type="submit" disabled={!typeof gallons=='number'}>
+                    <p>Total Due: NaN</p>
+                    <Button className="register" block size="lg" type="submit" disabled={!typeof gallons =='number'}>
                         Get Qutoe
                     </Button>
                 </Form>
