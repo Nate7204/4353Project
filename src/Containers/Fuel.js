@@ -33,7 +33,7 @@ export default function Fuel(){
                     </Form.Group>
                     <p>Suggested Price: NaN</p>
                     <p>Total Due: NaN</p>
-                    <Button className="register" block size="lg" type="submit" disabled={!typeof gallons =='number'}>
+                    <Button className="quote" block size="lg" type="submit" disabled={!typeof gallons =='number'}>
                         Get Qutoe
                     </Button>
                 </Form>
