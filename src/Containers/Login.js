@@ -14,7 +14,7 @@ export default function Login(){
     }
 
     function handleSubmit(event){
-
+        history.push("/WelcomePage")
     }
 
     const registerSubmit = (e) =>{  //function that happens when Register button is pressed
