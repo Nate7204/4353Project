@@ -19,11 +19,10 @@ const [FullName, setFullname] = useState("")
   }
     
     function handleSubmit(event){
-        history.push("/WelcomePage")
 	event.preventDefault()
 
         if(validLength()){
-            history.push("/")
+            history.push("/WelcomePage")
         }
         else{
             if(FullName.length === 0){
