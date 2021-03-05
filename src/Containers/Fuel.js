@@ -28,13 +28,13 @@ export default function Fuel(){
                                 type="text"
                                 autoFocus
                                 value={date}
-                                onChage={(e) => setDate(e.target.value)}
+                                onChange={(e) => setDate(e.target.value)}
                             />
                     </Form.Group>
                     <p>Suggested Price: NaN</p>
                     <p>Total Due: NaN</p>
                     <Button className="quote" block size="lg" type="submit" disabled={!typeof gallons =='number'}>
-                        Get Qutoe
+                        Get Quote
                     </Button>
                 </Form>
             </div>
