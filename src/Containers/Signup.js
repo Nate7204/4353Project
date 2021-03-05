@@ -2,12 +2,21 @@ import React, {useState} from "react"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 import {useHistory} from "react-router-dom"
+import axios from "axios"
 import './Signup.css'
+
+function register(username, password) {
+    return axios.post("http://localhost:8080/api/auth/signup", {
+      username,
+      password
+    });
+}
 
 export default function Signup(){
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
+    const [noErrors, setNoErrors] = useState(true)
     var history = useHistory()
 
     function validLength(){
@@ -16,9 +25,29 @@ export default function Signup(){
 
     function handleSubmit(event){
         event.preventDefault()
-
+        setNoErrors(true)
+        
         if(validLength()){
-            history.push("/")
+            register(username,password).then(
+                () => { 
+                    //for some reason code does not reach here when there are no errors
+                    //so i had to create noErrors and do an if statement on line 47
+                },
+                error => {    
+                    const resMessage = (
+                        error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                        error.message ||
+                        error.toString()
+    
+                    alert(error.response.data.message)
+                    setNoErrors(false)
+                })
+            if(noErrors){
+                history.push("/")
+                alert("Registered successfully")
+            }
         }
         else{
             if(username.length === 0){

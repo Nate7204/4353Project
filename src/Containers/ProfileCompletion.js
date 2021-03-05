@@ -6,7 +6,7 @@ import NavBar from "./NavBar"
 import "./Login.css"
 
 export default function ProfileCompletion(){
-const [FullName, setFullname] = useState("")
+  const [FullName, setFullname] = useState("")
   const [AddressOne, setAddressOne] = useState("")
   const [AddressTwo, setAddressTwo] = useState("")
   const [City, setCity] = useState("")
@@ -19,10 +19,10 @@ const [FullName, setFullname] = useState("")
   }
     
     function handleSubmit(event){
-	event.preventDefault()
+	    event.preventDefault()
 
         if(validLength()){
-            history.push("/WelcomePage")
+            history.push("/")
         }
         else{
             if(FullName.length === 0){
@@ -66,16 +66,16 @@ const [FullName, setFullname] = useState("")
             <form class="form" id="forms" onSubmit={handleSubmit}>
                 
                 <label>Full Name</label>
-                <input type="text" placeholder="John Smith" id="FullName"></input>
+                <input type="text" placeholder="John Smith" id="FullName" onChange={(e) => setFullname(e.target.value)}></input>
                 
                 <label>Address 1</label>
-                <input type="text" placeholder="1234 Home Avenue" id="Adress1"></input>
+                <input type="text" placeholder="1234 Home Avenue" id="Adress1" onChange={(e) => setAddressOne(e.target.value)}></input>
                 
                 <label>Address 2</label>
-                <input type="text" placeholder="1234 Home Avenue" id="Address2"></input>
+                <input type="text" placeholder="1234 Home Avenue" id="Address2" onChange={(e) => setAddressTwo(e.target.value)}></input>
                 
                 <label>City</label>
-                <input type="text" placeholder="Enter City Name" id="City"></input>
+                <input type="text" placeholder="Enter City Name" id="City" onChange={(e) => setCity(e.target.value)}></input>
                 
                 <label>State</label>
                 <select>
@@ -133,7 +133,7 @@ const [FullName, setFullname] = useState("")
             </select>		
                 
                 <label>Zip Code</label>
-                <input type="text" placeholder="Enter Zip Code" id="ZipCode"></input>
+                <input type="text" placeholder="Enter Zip Code" id="ZipCode" onChange={(e) => setZipCode(e.target.value)}></input>
                 
                 <button type="submit">Submit</button>
             </form>

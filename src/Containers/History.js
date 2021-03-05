@@ -10,7 +10,7 @@ export default function History(){
     */
     useEffect(() => {   
         const addRow = async () =>{
-            setValues([{
+            setValues(values => [{
                 Gallons: 1,
                 Address: 'Road rd',
                 Date: 'Tomorrow',
@@ -23,7 +23,7 @@ export default function History(){
                 Date: 'Yesterday',
                 Price: 10,
                 Due: 20,
-            }])
+            }]);
         }
 
         addRow()
@@ -52,18 +52,20 @@ export default function History(){
         <div className="Login">
             <NavBar />
             <table>
-                <tr>
-                    <td>Gallons</td>
-                    <td>Address</td>
-                    <td>Delivery Date</td>
-                    <td>Price per gallon</td>
-                    <td>Amount Due</td>
-                </tr>
-                <td>{gallons}</td>
-                <td>{address}</td>
-                <td>{dates}</td>
-                <td>{prices}</td>
-                <td>{amountDues}</td>
+                    <tbody>
+                    <tr>
+                        <td>Gallons</td>
+                        <td>Address</td>
+                        <td>Delivery Date</td>
+                        <td>Price per gallon</td>
+                        <td>Amount Due</td>
+                    </tr>
+                    <td>{gallons}</td>
+                    <td>{address}</td>
+                    <td>{dates}</td>
+                    <td>{prices}</td>
+                    <td>{amountDues}</td>
+                </tbody>
             </table>
         </div>
     )

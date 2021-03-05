@@ -2,11 +2,29 @@ import React, {useState} from "react"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 import {useHistory} from "react-router-dom"
+import axios from "axios"
 import "./Login.css"
 
+function login(username, password){
+    return axios
+        .post("http://localhost:8080/api/auth/signin", {
+            username,
+            password
+        })
+        .then(response => {
+            if (response.data.accessToken){
+                localStorage.setItem("user", JSON.stringify(response.data))
+            }
+
+            return response.data
+        })
+}
+
 export default function Login(){
-    const [username, setUsername] = useState("")    //useState("") initializes username and setUsername
+    const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
+    const [message, setMessage] = useState("")
+
     var history = useHistory()
 
     function validLength(){
@@ -14,11 +32,27 @@ export default function Login(){
     }
 
     function handleSubmit(event){
-        history.push("/WelcomePage")
+        event.preventDefault()
+
+        login(username,password).then(
+            () => { 
+                history.push("/WelcomePage")
+            },
+            error => {
+
+                const resMessage = (
+                    error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                    error.message ||
+                    error.toString()
+
+                alert(error.response.data.resMessage)
+            })
     }
 
     const registerSubmit = (e) =>{  //function that happens when Register button is pressed
-        history.push("/Signup")     //links to Signup.js    must add the link to App.js
+        history.push("/Signup")     //links to Signup.js
     }
 
     return (

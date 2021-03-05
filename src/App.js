@@ -8,6 +8,15 @@ import ProfileCompletion from './Containers/ProfileCompletion'
 import Fuel from './Containers/Fuel'
 
 class App extends Component{
+    /*
+    constructor(props){
+        super(props)
+        this.state = { apiResponse: ""}
+
+        <p>{this.state.apiResponse}</p>
+    }
+    */
+
     render(){
         return(
             <Router>
