@@ -5,6 +5,13 @@ import NavBar from "./NavBar"
 export default function Signup(){
     var history = useHistory()
 
+    const token = JSON.parse(localStorage.getItem('user'))
+
+    if(token.newUser === true){
+        alert("true")
+        history.push("/ProfileCompletion")
+    }
+    
     return(
     <div className="Login">
             <NavBar />
