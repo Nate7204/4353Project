@@ -4,6 +4,7 @@ const config = require("../auth/auth.config")
 
 var usernames = ["theusername"]
 var passwords = ["password1"]  //temporary variables, will be replaced with DB
+var newUser = [false]
 
 var jwt = require("jsonwebtoken")
 var bcrypt = require("bcryptjs")
@@ -18,6 +19,7 @@ exports.signup = (req, res) => {
     else{
         usernames.push(req.body.username)
         passwords.push(req.body.password)
+        newUser.push(true)
         //passwords.push(bcrypt.hashSync(req.body.password, 8))
     }
 }
@@ -50,6 +52,7 @@ exports.signin = (req, res) => {
               })
             res.status(200).send({
                 username: req.body.username,
+                newUser: newUser[usernames.indexOf(req.body.username)],
                 accessToken: token
             })
             
