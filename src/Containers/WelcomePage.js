@@ -8,7 +8,6 @@ export default function Signup(){
     const token = JSON.parse(localStorage.getItem('user'))
 
     if(token.newUser === true){
-        alert("true")
         history.push("/ProfileCompletion")
     }
     
