@@ -4,7 +4,9 @@ import Button from "react-bootstrap/Button"
 import { useHistory } from "react-router-dom"
 import NavBar from "./NavBar"
 import './Fuel.css'
+class PricingModule {
 
+}
 export default function Fuel(){
     const [gallons, setGallons] = useState("")
     const [date, setDate] = useState("")
