@@ -1,15 +1,19 @@
-//const db = require("../models/user.model")
+const db = require("../models/user.model")
 const config = require("../auth/auth.config")
-//const User = db.User                          //do this when DB is setup and change user.model.js
-
-var usernames = ["theusername"]
-var passwords = ["password1"]  //temporary variables, will be replaced with DB
-var newUser = [false]
 
 var jwt = require("jsonwebtoken")
 var bcrypt = require("bcryptjs")
 
 exports.signup = (req, res) => {
+    var usernames = db.map((index) =>(
+        index.username
+    ))
+    var passwords = db.map((index) =>(
+        index.password
+    ))
+    var newUser = db.map((index) =>(
+        index.newUser
+    ))
 
     if(usernames.indexOf(req.body.username) != -1){
         res.status(400).send({
@@ -17,15 +21,26 @@ exports.signup = (req, res) => {
         })
     }
     else{
-        usernames.push(req.body.username)
-        passwords.push(req.body.password)
-        newUser.push(true)
+        db.push({
+            username: req.body.username,
+            password: req.body.password,
+            newUser: true
+        })
         //passwords.push(bcrypt.hashSync(req.body.password, 8))
     }
 }
 
 //this gets called when you loggin 
 exports.signin = (req, res) => {
+    var usernames = db.map((index) =>(
+        index.username
+    ))
+    var passwords = db.map((index) =>(
+        index.password
+    ))
+    var newUser = db.map((index) =>(
+        index.newUser
+    ))
 
     if(usernames.indexOf(req.body.username) == -1){
         res.status(404).send({message: "User not found"})
@@ -53,9 +68,14 @@ exports.signin = (req, res) => {
             res.status(200).send({
                 username: req.body.username,
                 newUser: newUser[usernames.indexOf(req.body.username)],
-                accessToken: token
+                accessToken: token      
             })
             
         }
     }
 }
+
+/*          example of changing something in db array
+            var index = usernames.indexOf(req.body.username)
+            db[index].newUser = false
+*/
