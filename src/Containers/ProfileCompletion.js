@@ -6,9 +6,9 @@ import NavBar from "./NavBar"
 import axios from "axios"
 import "./Login.css"
 
-function RegisterForm(Fullname, AddressOne, AddressTwo, City, ZipCode) {
+function RegisterForm(Fullname, AddressOne, AddressTwo, City, State, ZipCode) {
     return axios.post("http://localhost:8080/api/auth/profileform", {
-        Fullname, AddressOne, AddressTwo, City, ZipCode
+        Fullname, AddressOne, AddressTwo, City, State, ZipCode
     });
 }
 
@@ -91,7 +91,7 @@ export default function ProfileCompletion(){
                 <input type="text" placeholder="Enter City Name" id="City" onChange={(e) => setCity(e.target.value)}></input>
                 
                 <label>State</label>
-                <select>
+                <select id="State" onChange={(e)=> setState(e.target.value)}>
                 <option value="AL">Alabama</option>
                 <option value="AK">Alaska</option>
                 <option value="AZ">Arizona</option>
@@ -144,7 +144,7 @@ export default function ProfileCompletion(){
                 <option value="WI">Wisconsin</option>
                 <option value="WY">Wyoming</option>
             </select>		
-                
+
                 <label>Zip Code</label>
                 <input type="text" placeholder="Enter Zip Code" id="ZipCode" onChange={(e) => setZipCode(e.target.value)}></input>
                 
