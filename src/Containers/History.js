@@ -27,7 +27,7 @@ export default function History(){
         }
 
         addRow()
-    })
+    }, [])
 
     //values.map() basically transforms values
     //in this case for every element in values, it returns a <tr> with index.Gallons inside the <tr>
