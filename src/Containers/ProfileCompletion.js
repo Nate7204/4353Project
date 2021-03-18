@@ -3,13 +3,22 @@ import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 import {useHistory} from "react-router-dom"
 import NavBar from "./NavBar"
+import axios from "axios"
 import "./Login.css"
+
+function RegisterForm(Fullname, AddressOne, AddressTwo, City, ZipCode) {
+    return axios.post("http://localhost:8080/api/auth/profileform", {
+        Fullname, AddressOne, AddressTwo, City, ZipCode
+    });
+}
+
 
 export default function ProfileCompletion(){
   const [FullName, setFullname] = useState("")
   const [AddressOne, setAddressOne] = useState("")
   const [AddressTwo, setAddressTwo] = useState("")
   const [City, setCity] = useState("")
+  const [State, setState] = useState("")
   const [ZipCode, setZipCode] = useState("")
 
     var history = useHistory()
@@ -22,7 +31,11 @@ export default function ProfileCompletion(){
 	    event.preventDefault()
 
         if(validLength()){
-            history.push("/")
+            RegisterForm(FullName, AddressOne, AddressTwo, City, ZipCode)
+            const info = JSON.parse(localStorage.getItem('user'))
+            info.newUser = false
+            localStorage.setItem("user", JSON.stringify(info))
+            history.push("/WelcomePage")
         }
         else{
             if(FullName.length === 0){
