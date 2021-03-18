@@ -1,14 +1,22 @@
-const db = require("../models/user.model")
+//const db = require("../models/user.model")
 const config = require("../auth/auth.config")
 
 var usernames = ["theusername"]
-var passwords = ["password1"]
+var passwords = ["password1"]  //temporary variables, will be replaced with DB
 var newUser = [false]
+
+var fullnames = ["thefullname"]
+var addressones = ["addressone"]
+var addresstwos = ["addresstwo"]
+var aCitys = ["thecity"]
+var aStates = ["thestate"]
+var zipcodes = ["zipcode"]
 
 var jwt = require("jsonwebtoken")
 var bcrypt = require("bcryptjs")
 
 exports.signup = (req, res) => {
+
     if(usernames.indexOf(req.body.username) != -1){
         res.status(400).send({
             message: "Username already in use!"
@@ -24,6 +32,7 @@ exports.signup = (req, res) => {
 
 //this gets called when you loggin 
 exports.signin = (req, res) => {
+
     if(usernames.indexOf(req.body.username) == -1){
         res.status(404).send({message: "User not found"})
     }
@@ -50,9 +59,19 @@ exports.signin = (req, res) => {
             res.status(200).send({
                 username: req.body.username,
                 newUser: newUser[usernames.indexOf(req.body.username)],
-                accessToken: token      
+                accessToken: token
             })
             
         }
     }
+}
+
+//find out how to request the address
+exports.profileform = (req, res) => {
+    fullnames.push(req.body.FullName)
+    addressones.push(req.body.AddressOne)
+    addresstwos.push(req.body.AddressTwo)
+    aCitys.push(req.body.City)
+    zipcodes.push(req.body.ZipCode)
+    newUser.push(false)
 }
