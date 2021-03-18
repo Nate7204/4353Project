@@ -68,11 +68,28 @@ exports.signin = (req, res) => {
 
 //find out how to request the address
 exports.profileform = (req, res) => {
-    fullnames.push(req.body.FullName)
-    addressones.push(req.body.AddressOne)
-    addresstwos.push(req.body.AddressTwo)
-    aStates.push(req.body.State)
-    aCitys.push(req.body.City)
-    zipcodes.push(req.body.ZipCode)
-    newUser.push(false)
+    var x = 0;
+    var y = 0;
+    for(x = 0; x < usernames.length; x++){
+        if(usernames[x]==username){
+            y++;
+        }
+    }
+    if(newUser[y]==true){
+        fullnames.push(req.body.FullName)
+        addressones.push(req.body.AddressOne)
+        addresstwos.push(req.body.AddressTwo)
+        aStates.push(req.body.State)
+        aCitys.push(req.body.City)
+        zipcodes.push(req.body.ZipCode)
+        newUser.push(false)
+    }
+    else{
+        fullnames[y] = req.body.FullName
+        addressones[y] = req.body.AddressOne
+        addresstwos[y] = req.body.AddressTwo
+        aStates[y] = req.body.State
+        aCitys[y] = req.body.City
+        zipcodes[y] = req.body.ZipCode
+    }
 }
