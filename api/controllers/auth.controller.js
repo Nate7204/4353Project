@@ -71,6 +71,7 @@ exports.profileform = (req, res) => {
     fullnames.push(req.body.FullName)
     addressones.push(req.body.AddressOne)
     addresstwos.push(req.body.AddressTwo)
+    aStates.push(req.body.State)
     aCitys.push(req.body.City)
     zipcodes.push(req.body.ZipCode)
     newUser.push(false)
