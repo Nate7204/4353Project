@@ -8,7 +8,7 @@ import "./Login.css"
 
 function RegisterForm(Fullname, AddressOne, AddressTwo, City, State, ZipCode) {
     return axios.post("http://localhost:8080/api/auth/profileform", {
-        Fullname, AddressOne, AddressTwo, City, State, ZipCode
+        Fullname, AddressOne, AddressTwo, City, State, ZipCode, username
     });
 }
 
@@ -21,6 +21,7 @@ export default function ProfileCompletion(){
   const [State, setState] = useState("")
   const [ZipCode, setZipCode] = useState("")
 
+  const username = JSON.parse(localStorage.getItem('user')).username
     var history = useHistory()
 
 	function validLength(){
@@ -31,7 +32,7 @@ export default function ProfileCompletion(){
 	    event.preventDefault()
 
         if(validLength()){
-            RegisterForm(FullName, AddressOne, AddressTwo, City, ZipCode)
+            RegisterForm(FullName, AddressOne, AddressTwo, City, ZipCode, username)
             const info = JSON.parse(localStorage.getItem('user'))
             info.newUser = false
             localStorage.setItem("user", JSON.stringify(info))
