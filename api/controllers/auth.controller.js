@@ -1,47 +1,29 @@
 const db = require("../models/user.model")
 const config = require("../auth/auth.config")
 
+var usernames = ["theusername"]
+var passwords = ["password1"]
+var newUser = [false]
+
 var jwt = require("jsonwebtoken")
 var bcrypt = require("bcryptjs")
 
 exports.signup = (req, res) => {
-    var usernames = db.map((index) =>(
-        index.username
-    ))
-    var passwords = db.map((index) =>(
-        index.password
-    ))
-    var newUser = db.map((index) =>(
-        index.newUser
-    ))
-
     if(usernames.indexOf(req.body.username) != -1){
         res.status(400).send({
             message: "Username already in use!"
         })
     }
     else{
-        db.push({
-            username: req.body.username,
-            password: req.body.password,
-            newUser: true
-        })
+        usernames.push(req.body.username)
+        passwords.push(req.body.password)
+        newUser.push(true)
         //passwords.push(bcrypt.hashSync(req.body.password, 8))
     }
 }
 
 //this gets called when you loggin 
 exports.signin = (req, res) => {
-    var usernames = db.map((index) =>(
-        index.username
-    ))
-    var passwords = db.map((index) =>(
-        index.password
-    ))
-    var newUser = db.map((index) =>(
-        index.newUser
-    ))
-
     if(usernames.indexOf(req.body.username) == -1){
         res.status(404).send({message: "User not found"})
     }
@@ -74,8 +56,3 @@ exports.signin = (req, res) => {
         }
     }
 }
-
-/*          example of changing something in db array
-            var index = usernames.indexOf(req.body.username)
-            db[index].newUser = false
-*/
