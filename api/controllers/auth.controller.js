@@ -12,6 +12,11 @@ var aCitys = ["thecity"]
 var aStates = ["thestate"]
 var zipcodes = ["zipcode"]
 
+var gallonsRequested = [0]
+var deliveryDate = ["12/31/1999"]
+var suggestedPrice = [0]
+var totalDue = [0]
+
 var jwt = require("jsonwebtoken")
 var bcrypt = require("bcryptjs")
 

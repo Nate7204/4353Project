@@ -5,7 +5,12 @@ import { useHistory } from "react-router-dom"
 import NavBar from "./NavBar"
 import './Fuel.css'
 class PricingModule {
-
+    
+}
+function fuelQuote(gallons, address, date, suggested, total) {
+    return axios.post("http://localhost:8080/api/auth/fuelQuote", {
+        gallons, address, date, suggested, total, username
+    });
 }
 export default function Fuel(){
     const [gallons, setGallons] = useState("")
@@ -42,7 +47,7 @@ export default function Fuel(){
         return day > 0 && day <= monthLength[month - 1];
     };
         return (
-            <div className="Login">
+            <div className="Fuel">
                 <NavBar/>
                 <h1>Quote Page</h1>
                 <Form onSubmit={handleSubmit}>
@@ -68,7 +73,7 @@ export default function Fuel(){
                     </Form.Group>
                     <p>Suggested Price: NaN</p>
                     <p>Total Due: Nan</p>
-                    <Button className="register" block size="lg" type="submit" disabled={!isNumber(gallons) || !isValidDate(date)}>
+                    <Button className="quote" block size="lg" type="submit" disabled={!isNumber(gallons) || !isValidDate(date)}>
                         Get Quote
                     </Button>
                 </Form>
