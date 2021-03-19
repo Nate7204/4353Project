@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+﻿import React, {useState} from "react"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 import { useHistory } from "react-router-dom"
@@ -10,18 +10,21 @@ class PricingModule {
 }
 function fuelQuote(gallons, address, date, suggested, total) {
     return axios.post("http://localhost:8080/api/auth/fuelQuote", {
-        gallons, address, date, suggested, total, username
+        gallons, address, date, suggested, total
     });
 }
 export default function Fuel(){
     const [gallons, setGallons] = useState("")
     const [date, setDate] = useState("")
-    const username = JSON.parse(localStorage.getItem('user')).username
-
+    const addy = JSON.parse(localStorage.getItem('user')).addressones
+    var suggested = 0
+    var total = 0
     var history = useHistory();
 
     function handleSubmit(event) {
         history.push("/WelcomePage")
+        fuelQuote(gallons, addy, date, suggested, total)
+        alert("Quote Made")
     }
     function isNumber(n) { return /^-?[\d.]+(?:e-?\d+)?$/.test(n); } 
     function isValidDate(dateString) {

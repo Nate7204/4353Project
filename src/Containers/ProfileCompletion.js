@@ -8,7 +8,7 @@ import "./Login.css"
 
 function RegisterForm(Fullname, AddressOne, AddressTwo, City, State, ZipCode) {
     return axios.post("http://localhost:8080/api/auth/profileform", {
-        Fullname, AddressOne, AddressTwo, City, State, ZipCode, username
+        Fullname, AddressOne, AddressTwo, City, State, ZipCode
     });
 }
 

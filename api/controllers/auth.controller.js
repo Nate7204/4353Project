@@ -13,6 +13,7 @@ var aStates = ["thestate"]
 var zipcodes = ["zipcode"]
 
 var gallonsRequested = [0]
+var quoteAddress = ["address"]
 var deliveryDate = ["12/31/1999"]
 var suggestedPrice = [0]
 var totalDue = [0]
@@ -69,6 +70,13 @@ exports.signin = (req, res) => {
             
         }
     }
+}
+exports.fuelquote = (req, res) => {
+    gallonsRequested.push(req.body.gallons)
+    quoteAddress.push(req.body.address)
+    deliveryDate.push(req.body.date)
+    suggestedPrice.push(req.body.suggested)
+    totalDue.push(req.body.total)
 }
 //find out how to request the address
 exports.profileform = (req, res) => {
