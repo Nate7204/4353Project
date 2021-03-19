@@ -70,7 +70,6 @@ exports.signin = (req, res) => {
         }
     }
 }
-
 //find out how to request the address
 exports.profileform = (req, res) => {
     var x = 0;

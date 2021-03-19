@@ -3,6 +3,7 @@ import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 import { useHistory } from "react-router-dom"
 import NavBar from "./NavBar"
+import axios from "axios"
 import './Fuel.css'
 class PricingModule {
     
@@ -15,6 +16,7 @@ function fuelQuote(gallons, address, date, suggested, total) {
 export default function Fuel(){
     const [gallons, setGallons] = useState("")
     const [date, setDate] = useState("")
+    const username = JSON.parse(localStorage.getItem('user')).username
 
     var history = useHistory();
 
@@ -63,7 +65,7 @@ export default function Fuel(){
                     <p>Your Address: NaN</p>
                     <p>Delivery Address: NaN</p>
                         <Form.Group size="lg" controlId="date">
-                            <Form.Label>Date (mm/dd/yyy)</Form.Label>
+                            <Form.Label>Date (mm/dd/yyyy)</Form.Label>
                             <Form.Control
                                 type="text"
                                 autoFocus
