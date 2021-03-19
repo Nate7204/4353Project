@@ -1,14 +1,12 @@
 import React, {useState} from "react"
-import Form from "react-bootstrap/Form"
-import Button from "react-bootstrap/Button"
 import {useHistory} from "react-router-dom"
 import NavBar from "./NavBar"
 import axios from "axios"
-import "./Login.css"
+import "./ProfileCompletion.css"
 
-function RegisterForm(Fullname, AddressOne, AddressTwo, City, State, ZipCode) {
+function RegisterForm(Fullname, AddressOne, AddressTwo, City, State, ZipCode, username) {
     return axios.post("http://localhost:8080/api/auth/profileform", {
-        Fullname, AddressOne, AddressTwo, City, State, ZipCode
+        Fullname, AddressOne, AddressTwo, City, State, ZipCode, username
     });
 }
 
@@ -32,7 +30,7 @@ export default function ProfileCompletion(){
 	    event.preventDefault()
 
         if(validLength()){
-            RegisterForm(FullName, AddressOne, AddressTwo, City, ZipCode, username)
+            RegisterForm(FullName, AddressOne, AddressTwo, City, State, ZipCode, username)
             const info = JSON.parse(localStorage.getItem('user'))
             info.newUser = false
             localStorage.setItem("user", JSON.stringify(info))
@@ -75,7 +73,7 @@ export default function ProfileCompletion(){
     
     return(
         <div class="Login">
-            <NavBar/>
+            {JSON.parse(localStorage.getItem('user')).newUser === false && <NavBar/>}
                 <h2>Profile Management</h2>
             <form class="form" id="forms" onSubmit={handleSubmit}>
                 

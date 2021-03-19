@@ -1,56 +1,69 @@
 import React, {useState, useEffect} from "react"
 import NavBar from "./NavBar"
+import axios from "axios"
+
+
+function getHistory(){
+    var username = JSON.parse(localStorage.getItem("user")).username
+    return axios
+        .post("http://localhost:8080/api/auth/getHistory", {
+            username     
+        })
+        .then(response => {
+                localStorage.setItem("formData", JSON.stringify(response.data))
+            return response.data
+        })
+}
 
 export default function History(){
-    var [values, setValues] = useState([])
+    getHistory().then(
+        () => { 
+            
+        },
+        error => {
 
-    /*values are hard coded for now but will add functionality later(get data from api/database)
-    //not 100% sure what useEffect does, it just prevents this page from having infinite re-render loop when setValues() is called
-    //since setValues() updates the values state which makes the page rerender
-    */
-    useEffect(() => {   
-        const addRow = async () =>{
-            setValues(values => [{
-                Gallons: 1,
-                Address: 'Road rd',
-                Date: 'Tomorrow',
-                Price: 24,
-                Due: 24,
-            },
-            {
-                Gallons: 2,
-                Address: 'Street rd',
-                Date: 'Yesterday',
-                Price: 10,
-                Due: 20,
-            }]);
-        }
+            const resMessage = (
+                error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+                error.message ||
+                error.toString()
 
-        addRow()
-    }, [])
+            alert(error.response.data.resMessage)
+    })
+    
+    var values = JSON.parse(localStorage.getItem("formData"))
+    var gallons;
+    var address;
+    var dates;
+    var prices;
+    var amountDues;
 
     //values.map() basically transforms values
     //in this case for every element in values, it returns a <tr> with index.Gallons inside the <tr>
     //so basically gallons is an array of <tr> 
-    var gallons = values.map((index) =>(
-        <tr>{index.Gallons}</tr>
+    if(values.gallons){
+    gallons = values.gallons.map((index) =>(
+        <tr>{index}</tr>
     ))
-    var address = values.map((index) =>(
-        <tr>{index.Address}</tr>
+    address = values.address.map((index) =>(
+        <tr>{index}</tr>
     ))
-    var dates = values.map((index) =>(
-        <tr>{index.Date}</tr>
+    dates = values.date.map((index) =>(
+        <tr>{index}</tr>
     ))
-    var prices = values.map((index) =>(
-        <tr>{index.Price}</tr>
+    prices = values.price.map((index) =>(
+        <tr>{index}</tr>
     ))
-    var amountDues = values.map((index) =>(
-        <tr>{index.Due}</tr>
+    amountDues = values.due.map((index) =>(
+        <tr>{index}</tr>
     ))
+    }
 
     return(
         <div className="Login">
             <NavBar />
+            {!values.gallons && <h2>No form history yet</h2>}
             <table>
                     <tbody>
                     <tr>

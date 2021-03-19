@@ -14,6 +14,8 @@ function login(username, password){
         .then(response => {
             if (response.data.accessToken){
                 localStorage.setItem("user", JSON.stringify(response.data))
+                localStorage.setItem("formData", "No Data")
+                localStorage.setItem("address", "No Address")
             }
 
             return response.data
@@ -47,7 +49,7 @@ export default function Login(){
                     error.message ||
                     error.toString()
 
-                alert(error.response.data.resMessage)
+                alert("Wrong username or password")
             })
     }
 

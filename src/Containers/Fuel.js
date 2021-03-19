@@ -8,23 +8,54 @@ import './Fuel.css'
 class PricingModule {
     
 }
-function fuelQuote(gallons, address, date, suggested, total) {
+function fuelQuote(gallons, address, date, suggested, total, username) {
     return axios.post("http://localhost:8080/api/auth/fuelQuote", {
-        gallons, address, date, suggested, total
+        gallons, address, date, suggested, total, username
     });
 }
+
+function getAddress(){
+    var username = JSON.parse(localStorage.getItem("user")).username
+    return axios
+        .post("http://localhost:8080/api/auth/getAddress", {
+            username     
+        })
+        .then(response => {
+                localStorage.setItem("address", JSON.stringify(response.data))
+            return response.data
+        })
+}
+
 export default function Fuel(){
     const [gallons, setGallons] = useState("")
     const [date, setDate] = useState("")
-    const addy = JSON.parse(localStorage.getItem('user')).addressones
     var suggested = 0
     var total = 0
     var history = useHistory();
+    var username = JSON.parse(localStorage.getItem('user')).username
+
+    getAddress().then(
+        () => { 
+            
+        },
+        error => {
+            const resMessage = (
+                error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+                error.message ||
+                error.toString()
+
+            alert(error.response.data.resMessage)
+    })
+
+    const addy = JSON.parse(localStorage.getItem('address')).address
 
     function handleSubmit(event) {
-        fuelQuote(gallons, addy, date, suggested, total)
+        fuelQuote(gallons, addy, date, suggested, total, username)
         alert("Quote Made")
         history.push("/History")
+        window.location.reload();
     }
     function isNumber(n) { return /^-?[\d.]+(?:e-?\d+)?$/.test(n); } 
     function isValidDate(dateString) {
@@ -51,37 +82,37 @@ export default function Fuel(){
         // Check the range of the day
         return day > 0 && day <= monthLength[month - 1];
     };
-        return (
-            <div className="Fuel">
-                <NavBar/>
-                <h1>Quote Page</h1>
-                <Form onSubmit={handleSubmit}>
-                    <Form.Group size="lg" controlId="gallons">
-                        <Form.Label>Gallons</Form.Label>
+    return (
+        <div className="Fuel">
+            <NavBar/>
+            <h1>Quote Page</h1>
+            <Form onSubmit={handleSubmit}>
+                <Form.Group size="lg" controlId="gallons">
+                    <Form.Label>Gallons</Form.Label>
+                    <Form.Control
+                        type="text"
+                        autoFocus
+                        value={gallons}
+                        onChange={(e) => setGallons(e.target.value)}
+                    />
+                </Form.Group>
+                <p>Your Address: {addy}</p>
+                <p>Delivery Address: {addy}</p>
+                    <Form.Group size="lg" controlId="date">
+                        <Form.Label>Date (mm/dd/yyyy)</Form.Label>
                         <Form.Control
                             type="text"
                             autoFocus
-                            value={gallons}
-                            onChange={(e) => setGallons(e.target.value)}
+                            value={date}
+                            onChange={(e) => setDate(e.target.value)}
                         />
-                    </Form.Group>
-                    <p>Your Address: NaN</p>
-                    <p>Delivery Address: NaN</p>
-                        <Form.Group size="lg" controlId="date">
-                            <Form.Label>Date (mm/dd/yyyy)</Form.Label>
-                            <Form.Control
-                                type="text"
-                                autoFocus
-                                value={date}
-                                onChange={(e) => setDate(e.target.value)}
-                            />
-                    </Form.Group>
-                    <p>Suggested Price: NaN</p>
-                    <p>Total Due: Nan</p>
-                    <Button className="quote" block size="lg" type="submit" disabled={!isNumber(gallons) || !isValidDate(date)}>
-                        Get Quote
-                    </Button>
-                </Form>
-            </div>
-        );
-    }
+                </Form.Group>
+                <p>Suggested Price: NaN</p>
+                <p>Total Due: Nan</p>
+                <Button className="quote" block size="lg" type="submit" disabled={!isNumber(gallons) || !isValidDate(date)}>
+                    Get Quote
+                </Button>
+            </Form>
+        </div>
+    );
+}

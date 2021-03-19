@@ -12,11 +12,11 @@ var aCitys = ["thecity"]
 var aStates = ["thestate"]
 var zipcodes = ["zipcode"]
 
-var gallonsRequested = [0]
-var quoteAddress = ["address"]
-var deliveryDate = ["12/31/1999"]
-var suggestedPrice = [0]
-var totalDue = [0]
+var gallonsRequested = [[0,1]]
+var quoteAddress = [["address", "address two"]]
+var deliveryDate = [["12/31/1999", "1/1/2000"]]
+var suggestedPrice = [[0, 1]]
+var totalDue = [[0, 1]]
 
 var jwt = require("jsonwebtoken")
 var bcrypt = require("bcryptjs")
@@ -61,7 +61,7 @@ exports.signin = (req, res) => {
         else{
             var token = jwt.sign({ id: req.body.username }, config.secret, {
                 expiresIn: 86400 // 24 hours
-              })
+            })
             res.status(200).send({
                 username: req.body.username,
                 newUser: newUser[usernames.indexOf(req.body.username)],
@@ -71,30 +71,37 @@ exports.signin = (req, res) => {
         }
     }
 }
+
 exports.fuelquote = (req, res) => {
-    gallonsRequested.push(req.body.gallons)
-    quoteAddress.push(req.body.address)
-    deliveryDate.push(req.body.date)
-    suggestedPrice.push(req.body.suggested)
-    totalDue.push(req.body.total)
+    const index = usernames.indexOf(req.body.username)
+
+    //if statement is only for when first form is filled out
+    if(!gallonsRequested[index]){
+        gallonsRequested.push([])
+        quoteAddress.push([])
+        deliveryDate.push([])
+        suggestedPrice.push([])
+        totalDue.push([])
+    }
+    gallonsRequested[index].push(req.body.gallons)
+    quoteAddress[index].push(req.body.address)
+    deliveryDate[index].push(req.body.date)
+    suggestedPrice[index].push(req.body.suggested)
+    totalDue[index].push(req.body.total)
 }
+
 //find out how to request the address
 exports.profileform = (req, res) => {
-    var x = 0;
-    var y = 0;
-    for(x = 0; x < usernames.length; x++){
-        if(usernames[x]==username){
-            y++;
-        }
-    }
-    if(newUser[y]==true){
+    var y = usernames.indexOf(req.body.username)
+
+    if(newUser[y]===true){
         fullnames.push(req.body.FullName)
         addressones.push(req.body.AddressOne)
         addresstwos.push(req.body.AddressTwo)
         aStates.push(req.body.State)
         aCitys.push(req.body.City)
         zipcodes.push(req.body.ZipCode)
-        newUser.push(false)
+        newUser[y] = false
     }
     else{
         fullnames[y] = req.body.FullName
@@ -104,4 +111,29 @@ exports.profileform = (req, res) => {
         aCitys[y] = req.body.City
         zipcodes[y] = req.body.ZipCode
     }
+}
+
+exports.getHistory = (req, res) =>{
+    const index = usernames.indexOf(req.body.username)
+
+    /*
+    Here it is sending the form data that corresponds to the username
+    so if the username is "theusername" index = 0 so all the quoteHIstory will be found
+    in the array of index position 0 of the 2d arrays for each of the data
+    */
+    res.status(200).send({
+        gallons: gallonsRequested[index],
+        address: quoteAddress[index],
+        date: deliveryDate[index],
+        price: suggestedPrice[index],
+        due: totalDue[index]
+    })
+}
+
+exports.getAddress = (req, res) =>{
+    const index = usernames.indexOf(req.body.username)
+
+    res.status(200).send({
+        address: addressones[index]
+    })
 }

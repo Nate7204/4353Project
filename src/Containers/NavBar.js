@@ -7,15 +7,18 @@ export default function NavBar(){
     var history = useHistory()
 
     const profileSubmit = (e) =>{
-        history.push("/ProfileCompletion")    //FIXME: change to profile management
+        history.push("/ProfileCompletion") 
+        window.location.reload();
     }
 
-    const formSubmit = (e) =>{          //FIXME: change to form
+    const formSubmit = (e) =>{          
         history.push("/Fuel")
+        window.location.reload();
     }
 
     const historySubmit = (e) =>{     
         history.push("/History")
+        window.location.reload();
     }
 
     return(
