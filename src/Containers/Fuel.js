@@ -22,9 +22,9 @@ export default function Fuel(){
     var history = useHistory();
 
     function handleSubmit(event) {
-        history.push("/WelcomePage")
         fuelQuote(gallons, addy, date, suggested, total)
         alert("Quote Made")
+        history.push("/History")
     }
     function isNumber(n) { return /^-?[\d.]+(?:e-?\d+)?$/.test(n); } 
     function isValidDate(dateString) {
