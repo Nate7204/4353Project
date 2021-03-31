@@ -27,6 +27,7 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
 
+/* UNCOMMENT THIS TO TEST QUERYS ON SERVER STARTUP
 let pool = mysql.createPool({
         connectionLimit: 10,
         host: '99.77.89.225',
@@ -46,8 +47,9 @@ pool.getConnection(function(err, connection) {
  connection.query(str, function(err, result, fields){
    connection.release()
     if (err) throw err;
-    console.log(result[0].password);
+    console.log(result);
   })
 
   console.log('Connected to database')
 })
+*/
