@@ -1,5 +1,5 @@
-//const db = require("../models/user.model")
 const config = require("../auth/auth.config")
+const mysql = require('mysql')
 
 var usernames = ["theusername"]
 var passwords = ["password1"]  //temporary variables, will be replaced with DB
@@ -21,55 +21,118 @@ var totalDue = [[0, 1]]
 var jwt = require("jsonwebtoken")
 var bcrypt = require("bcryptjs")
 
-exports.signup = (req, res) => {
+let pool = mysql.createPool({
+        connectionLimit: 10,
+        host: '99.77.89.225',
+        user: 'root',
+        password: '',
+        database: 'fuel'
+})
 
-    if(usernames.indexOf(req.body.username) != -1){
-        res.status(400).send({
-            message: "Username already in use!"
+
+exports.signup = (req, res) => {
+    let valid = true   //used in duplicate email check
+    let encryptedPass = bcrypt.hashSync(req.body.password,8)
+    let query = "SELECT username FROM profile WHERE username = '" + req.body.username + "'"
+    let insert = "INSERT INTO profile (username, password, newUser) VALUES ('" + req.body.username + "', '"+ encryptedPass + "', 1);"
+
+    //must add async keyword to be able to use await
+    pool.getConnection( async function(err, connection) {
+        if(err){
+            return console.error('error:' + err.message)
+        }    
+        console.log('Signup function called')
+        
+        //must use await and promise to make the program wait for query to finish
+        valid = await new Promise(function(resolve, reject) {
+            setTimeout(function() {
+                connection.query(query, function(err, result, fields){
+                    if (err) throw err;
+                    if(result.length != 0){  //if result has something in it (ie the username is in the DB) then deny signup              
+                        console.log("Duplicate username, denying signup")
+                        res.status(400).send({
+                            message: "Username already in use!"
+                        })
+                        resolve(false)  //sets valid to false, username is already in DB
+                    }
+                    else{
+                        resolve(true)   //sets valid to true, username is not in DB
+                    }
+                })
+                }, 2000);
         })
-    }
-    else{
-        usernames.push(req.body.username)
-        passwords.push(req.body.password)
-        newUser.push(true)
-        //passwords.push(bcrypt.hashSync(req.body.password, 8))
-    }
+        //dont have to use a promise here since nothing depends on this query
+        if(valid){
+            connection.query(insert, function(err, result, fields){
+                if (err) throw err;
+                console.log("No duplicate username, signup success")
+                res.status(200).send({
+                    message: "Signup Successfully"
+                })
+            })
+        }
+        connection.release();
+    })
 }
 
 //this gets called when you loggin 
 exports.signin = (req, res) => {
+    let valid = true;
+    let query = "SELECT username, password FROM profile WHERE username = '" + req.body.username + "'"
+    
+    console.log('Login function called')
+    
+    pool.getConnection( async function(err, connection) {
+        if(err){
+            return console.error('error:' + err.message)
+        }    
 
-    if(usernames.indexOf(req.body.username) == -1){
-        res.status(404).send({message: "User not found"})
-    }
-    else{
-        var passwordIsValid = req.body.password == passwords[usernames.indexOf(req.body.username)]
+        //must use await and promise to make the program wait for query to finish
+        valid = await new Promise(function(resolve, reject) {
+            setTimeout(function() {
+                connection.query(query, function(err, result, fields){
+                    if (err) throw err;
 
-        /*  use this whenever passwords are encyrpted (currently "password1" is not encrypted)
-        var passwordIsValid = bcrypt.compareSync(
-            req.body.password,
-            passwords[usernames.indexOf(req.body.username)]
-        )
-        */
+                    if(result.length != 0){  //if the username is in the DB
+                        var passwordIsValid = bcrypt.compareSync(
+                            req.body.password,
+                            result[0].password  //here we can use result[0] since the query should only return one row
+                        )
+                            
+                        if(!passwordIsValid) {
+                            console.log("Invalid Password!")
+                            res.status(401).send({
+                                accessToken: null,
+                                messssage: "Invalid Password!"
+                            })
+                        }
+                        else{
+                            console.log("Password was valid, login allowed")
+                            var token = jwt.sign({ id: req.body.username }, config.secret, {
+                                expiresIn: 86400 // 24 hours
+                            })
+                            res.status(200).send({
+                                username: req.body.username,
+                                newUser: newUser[usernames.indexOf(req.body.username)],
+                                accessToken: token
+                            })
+                            
+                        }
+                        resolve(true)
+                    }
+                    else{
+                        resolve(false)
+                    }
+                })
+                }, 2000);
+        })
 
-        if(!passwordIsValid) {
-            res.status(401).send({
-                accessToken: null,
-                messssage: "Invalid Password!"
-            })
+        if(!valid){     //username not in database
+            console.log("Username not found. Denying login.")
+            res.status(404).send({message: "User not found"})
         }
-        else{
-            var token = jwt.sign({ id: req.body.username }, config.secret, {
-                expiresIn: 86400 // 24 hours
-            })
-            res.status(200).send({
-                username: req.body.username,
-                newUser: newUser[usernames.indexOf(req.body.username)],
-                accessToken: token
-            })
-            
-        }
-    }
+        connection.release();
+    })
 }
 
 exports.fuelquote = (req, res) => {

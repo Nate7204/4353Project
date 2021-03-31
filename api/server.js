@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const authroutes = require("./routes/auth.routes")
 const userroutes = require("./routes/user.routes")
+const mysql = require('mysql')
 
 const app = express();
 
@@ -25,3 +26,28 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
+
+let pool = mysql.createPool({
+        connectionLimit: 10,
+        host: '99.77.89.225',
+        user: 'root',
+        password: '',
+        database: 'fuel'
+})
+
+let temp = "username2"
+
+let str = "SELECT username, password FROM profile WHERE username = '" + temp + "'"
+
+pool.getConnection(function(err, connection) {
+  if(err){
+    return console.error('error:' + err.message)
+  }
+ connection.query(str, function(err, result, fields){
+   connection.release()
+    if (err) throw err;
+    console.log(result[0].password);
+  })
+
+  console.log('Connected to database')
+})

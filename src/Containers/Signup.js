@@ -9,6 +9,9 @@ function register(username, password) {
     return axios.post("http://localhost:8080/api/auth/signup", {
       username,
       password
+    })
+    .then(response => {
+        return response.data
     });
 }
 
@@ -29,9 +32,9 @@ export default function Signup(){
         
         if(validLength()){
             register(username,password).then(
-                () => { 
-                    //for some reason code does not reach here when there are no errors
-                    //so i had to create noErrors and do an if statement on line 47
+                () => {       
+                    history.push("/")
+                    alert("Registered successfully")
                 },
                 error => {    
                     const resMessage = (
@@ -44,10 +47,6 @@ export default function Signup(){
                     alert(error.response.data.message)
                     setNoErrors(false)
                 })
-            if(noErrors){
-                history.push("/")
-                alert("Registered successfully")
-            }
         }
         else{
             if(username.length === 0){
