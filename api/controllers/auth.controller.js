@@ -1,7 +1,7 @@
 const config = require("../auth/auth.config")
 const mysql = require('mysql')
 
-var usernames = ["theusername"]
+var usernames = ["user"]
 var passwords = ["password1"]  //temporary variables, will be replaced with DB
 var newUser = [false]
 
@@ -139,8 +139,24 @@ exports.signin = (req, res) => {
 }
 
 exports.fuelquote = (req, res) => {
-    const index = usernames.indexOf(req.body.username)
+    var mysql = require('mysql');
 
+    var con = mysql.createConnection({
+        host: "99.77.89.225",
+        user: "root",
+        password: "",
+        database: "fuel"
+    });
+
+    con.connect(function (err) {
+        if (err) throw err;
+        con.query("INSERT INTO 'fuel' (`gallons`, `date`, `suggested`, `total`, `username`) VALUES(req.body.gallons, req.body.date, req.body.suggested, req.body.total, req.body.username)", function (err, result, fields) {
+            if (err) throw err;
+            console.log(result);
+        });
+    });
+/*
+    const index = usernames.indexOf(req.body.username)
     //if statement is only for when first form is filled out
     if(!gallonsRequested[index]){
         gallonsRequested.push([])
@@ -153,7 +169,7 @@ exports.fuelquote = (req, res) => {
     quoteAddress[index].push(req.body.address)
     deliveryDate[index].push(req.body.date)
     suggestedPrice[index].push(req.body.suggested)
-    totalDue[index].push(req.body.total)
+    totalDue[index].push(req.body.total)*/
 }
 
 //find out how to request the address

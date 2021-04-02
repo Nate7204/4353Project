@@ -5,6 +5,9 @@ import { useHistory } from "react-router-dom"
 import NavBar from "./NavBar"
 import axios from "axios"
 import './Fuel.css'
+
+
+
 class PricingModule {
     
 }
@@ -14,18 +17,6 @@ function fuelQuote(gallons, address, date, suggested, total, username) {
     });
 }
 
-function getAddress(){
-    var username = JSON.parse(localStorage.getItem("user")).username
-    return axios
-        .post("http://localhost:8080/api/auth/getAddress", {
-            username     
-        })
-        .then(response => {
-                localStorage.setItem("address", JSON.stringify(response.data))
-            return response.data
-        })
-}
-
 export default function Fuel(){
     const [gallons, setGallons] = useState("")
     const [date, setDate] = useState("")
@@ -33,23 +24,24 @@ export default function Fuel(){
     var total = 0
     var history = useHistory();
     var username = JSON.parse(localStorage.getItem('user')).username
+    var data = []; //user,pass,name,add1,add2,city,st,zip,new
+    var mysql = require('mysql');
 
-    getAddress().then(
-        () => { 
-            
-        },
-        error => {
-            const resMessage = (
-                error.response &&
-                error.response.data &&
-                error.response.data.message) ||
-                error.message ||
-                error.toString()
+    var con = mysql.createConnection({
+        host: "99.77.89.225",
+        user: "root",
+        password: "",
+        database: "fuel"
+    });
 
-            alert(error.response.data.resMessage)
-    })
-
-    const addy = JSON.parse(localStorage.getItem('address')).address
+    con.connect(function (err) {
+        if (err) throw err;
+        con.query("SELECT * FROM profile WHERE username = '" + username + "'", function (err, result, fields) {
+            if (err) throw err;
+            data = result;
+        });
+    });
+    
 
     function handleSubmit(event) {
         fuelQuote(gallons, addy, date, suggested, total, username)
@@ -96,8 +88,8 @@ export default function Fuel(){
                         onChange={(e) => setGallons(e.target.value)}
                     />
                 </Form.Group>
-                <p>Your Address: {addy}</p>
-                <p>Delivery Address: {addy}</p>
+                <p>Your Address: {data[3]}</p>
+                <p>Delivery Address: {data[3]}</p>
                     <Form.Group size="lg" controlId="date">
                         <Form.Label>Date (mm/dd/yyyy)</Form.Label>
                         <Form.Control
