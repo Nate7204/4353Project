@@ -49,7 +49,7 @@ export default function Login(){
                     error.message ||
                     error.toString()
 
-                alert("Wrong username or password")
+                alert(error.response.data.message)
             })
     }
 
