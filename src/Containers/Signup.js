@@ -19,7 +19,6 @@ export default function Signup(){
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
-    const [noErrors, setNoErrors] = useState(true)
     var history = useHistory()
 
     function validLength(){
@@ -28,7 +27,6 @@ export default function Signup(){
 
     function handleSubmit(event){
         event.preventDefault()
-        setNoErrors(true)
         
         if(validLength()){
             register(username,password).then(
@@ -45,7 +43,6 @@ export default function Signup(){
                         error.toString()
     
                     alert(error.response.data.message)
-                    setNoErrors(false)
                 })
         }
         else{
