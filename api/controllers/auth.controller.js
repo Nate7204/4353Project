@@ -84,6 +84,9 @@ exports.signin = (req, res) => {
     
     pool.getConnection( async function(err, connection) {
         if(err){
+            res.status(401).send({
+                message: "Failed to connect to database"
+            })
             return console.error('error:' + err.message)
         }    
 
@@ -103,7 +106,7 @@ exports.signin = (req, res) => {
                             console.log("Invalid Password!")
                             res.status(401).send({
                                 accessToken: null,
-                                messssage: "Invalid Password!"
+                                message: "Invalid Password!"
                             })
                         }
                         else{
