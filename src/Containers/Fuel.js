@@ -42,7 +42,7 @@ export default function Fuel(){
     
 
     function handleSubmit(event) {
-        fuelQuote(gallons, addy, date, suggested, total, username)
+        fuelQuote(gallons, data[3], date, suggested, total, username)
         alert("Quote Made")
         history.push("/History")
         window.location.reload();
