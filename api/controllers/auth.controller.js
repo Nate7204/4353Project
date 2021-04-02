@@ -193,24 +193,16 @@ exports.fuelquote = (req, res) => {
 
 //find out how to request the address
 exports.profileform = (req, res) => {
-    var y = usernames.indexOf(req.body.username)
+    var y = usernames.indexOf(req.body.username);
 
-    if(newUser[y]===true){
-        fullnames.push(req.body.FullName)
-        addressones.push(req.body.AddressOne)
-        addresstwos.push(req.body.AddressTwo)
-        aStates.push(req.body.State)
-        aCitys.push(req.body.City)
-        zipcodes.push(req.body.ZipCode)
-        newUser[y] = false
-    }
-    else{
-        fullnames[y] = req.body.FullName
-        addressones[y] = req.body.AddressOne
-        addresstwos[y] = req.body.AddressTwo
-        aStates[y] = req.body.State
-        aCitys[y] = req.body.City
-        zipcodes[y] = req.body.ZipCode
+    pool.getConnection( async function(err, connection) {
+        if(err){
+            return console.error('error:' + err.message)
+        }    
+        console.log('Profile Form function called')
+        let update = 'UPDATE profile SET name = "'+ req.body.FullName +'", addressOne = "' + req.body.AddressOne + '", addressTwo = "' + req.body.AddressTwo + '", city = "' + req.body.City + '", state = "' + req.body.State + '", zip =  "' + req.body.ZipCode + '", 0 WHERE username = "' + req.body.username + '"';
+        connection.query(update);
+        connection.release();
     }
 }
 
