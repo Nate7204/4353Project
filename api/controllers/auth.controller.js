@@ -137,25 +137,43 @@ exports.signin = (req, res) => {
         connection.release();
     })
 }
+exports.fuelInfo = (req, res) => {
+    let valid = true;
+    let query = "SELECT * FROM profile WHERE username = '" + req.body.username + "'"
 
+    pool.getConnection(async function (err, connection) {
+        if (err) {
+            res.status(401).send({
+                message: "Failed to connect to database"
+            })
+            return console.error('error:' + err.message)
+        }
+
+        //must use await and promise to make the program wait for query to finish
+        valid = await new Promise(function (resolve, reject) {
+            setTimeout(function () {
+                connection.query(query, function (err, result, fields) {
+                    if (err) throw err;
+                    res.status(200).send({
+                        data: result
+                    })
+                })
+            }, 2000);
+        })
+        connection.release();
+    })
+}
 exports.fuelquote = (req, res) => {
     var mysql = require('mysql');
     var values = "INSERT INTO 'fuel' (`gallons`, `date`, `suggested`, `total`, `username`) VALUES('" + req.body.gallons + "', '" + req.body.date + "', '" + req.body.suggestedPrice + "', '" + req.body.total + "', '" + req.body.username + "')"
-
-    var con = mysql.createConnection({
-        host: "99.77.89.225",
-        user: "root",
-        password: "",
-        database: "fuel"
-    });
-
-    con.connect(function (err) {
+    pool.getConnection(function (err, connection) {
         if (err) throw err;
         con.query(values, function (err, result, fields) {
             if (err) throw err;
             console.log(result);
         });
     });
+    connection.release();
 /*
     const index = usernames.indexOf(req.body.username)
     //if statement is only for when first form is filled out

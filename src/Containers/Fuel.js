@@ -13,7 +13,14 @@ function fuelQuote(gallons, address, date, suggested, total, username) {
         gallons, address, date, suggested, total, username
     });
 }
-
+function fuelInfo(username) {
+    return axios.post("http://localhost:8080/api/auth/fuelInfo", {
+        username
+    })
+        .then(response => {
+            return response.data
+        });
+}
 export default function Fuel(){
     const [gallons, setGallons] = useState("")
     const [date, setDate] = useState("")
@@ -21,26 +28,7 @@ export default function Fuel(){
     var total = 0
     var history = useHistory();
     var username = JSON.parse(localStorage.getItem('user')).username
-    var data = []; //user,pass,name,add1,add2,city,st,zip,new
-    var mysql = require('mysql');
-
-    //get data from DB, assiming its in an array for username in local storage
-    var con = mysql.createConnection({
-        host: "99.77.89.225",
-        user: "root",
-        password: "",
-        database: "fuel"
-    });
-
-    con.connect(function (err) {
-        if (err) throw err;
-        con.query("SELECT * FROM profile WHERE username = '" + username + "'", function (err, result, fields) {
-            if (err) throw err;
-            data = result;
-        });
-    });
-    
-
+    var data = fuelInfo(username); //user,pass,name,add1,add2,city,st,zip,new
     function handleSubmit(event) {
         fuelQuote(gallons, data[3], date, suggested, total, username)
         alert("Quote Made")
