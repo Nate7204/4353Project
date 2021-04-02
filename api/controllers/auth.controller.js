@@ -200,7 +200,7 @@ exports.profileform = (req, res) => {
             return console.error('error:' + err.message)
         }    
         console.log('Profile Form function called')
-        let update = 'UPDATE profile SET name = "'+ req.body.FullName +'", addressOne = "' + req.body.AddressOne + '", addressTwo = "' + req.body.AddressTwo + '", city = "' + req.body.City + '", state = "' + req.body.State + '", zip =  "' + req.body.ZipCode + '", 0 WHERE username = "' + req.body.username + '"';
+        let update = "UPDATE profile SET name = '"+ req.body.Fullname + "', addressOne = '" + req.body.AddressOne + "', addressTwo = '" + req.body.AddressTwo + "', city = '" + req.body.City + "', state = '" + req.body.State + "', zip =  '" + req.body.ZipCode + "', newUser = 0 WHERE username = '" + req.body.username + "'";
         connection.query(update);
         connection.release();
     }
