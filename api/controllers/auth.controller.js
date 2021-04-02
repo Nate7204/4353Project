@@ -140,6 +140,7 @@ exports.signin = (req, res) => {
 
 exports.fuelquote = (req, res) => {
     var mysql = require('mysql');
+    var values = "INSERT INTO 'fuel' (`gallons`, `date`, `suggested`, `total`, `username`) VALUES('" + req.body.gallons + "', '" + req.body.date + "', '" + req.body.suggestedPrice + "', '" + req.body.total + "', '" + req.body.username + "')"
 
     var con = mysql.createConnection({
         host: "99.77.89.225",
@@ -150,7 +151,7 @@ exports.fuelquote = (req, res) => {
 
     con.connect(function (err) {
         if (err) throw err;
-        con.query("INSERT INTO 'fuel' (`gallons`, `date`, `suggested`, `total`, `username`) VALUES(req.body.gallons, req.body.date, req.body.suggested, req.body.total, req.body.username)", function (err, result, fields) {
+        con.query(values, function (err, result, fields) {
             if (err) throw err;
             console.log(result);
         });

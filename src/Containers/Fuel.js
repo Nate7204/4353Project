@@ -5,9 +5,6 @@ import { useHistory } from "react-router-dom"
 import NavBar from "./NavBar"
 import axios from "axios"
 import './Fuel.css'
-
-
-
 class PricingModule {
     
 }
@@ -27,6 +24,7 @@ export default function Fuel(){
     var data = []; //user,pass,name,add1,add2,city,st,zip,new
     var mysql = require('mysql');
 
+    //get data from DB, assiming its in an array for username in local storage
     var con = mysql.createConnection({
         host: "99.77.89.225",
         user: "root",
