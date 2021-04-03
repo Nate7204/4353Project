@@ -18,6 +18,9 @@ function fuelInfo(username) {
         username
     })
         .then(response => {
+            if(response.data){
+                localStorage.setItem("address", response.data.address)
+            }
             return response.data
         });
 }

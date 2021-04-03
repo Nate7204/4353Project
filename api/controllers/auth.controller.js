@@ -78,7 +78,7 @@ exports.signup = (req, res) => {
 //this gets called when you loggin 
 exports.signin = (req, res) => {
     let valid = true;
-    let query = "SELECT username, password FROM profile WHERE username = '" + req.body.username + "'"
+    let query = "SELECT username, password, newUser FROM profile WHERE username = '" + req.body.username + "'"
     
     console.log('Login function called')
     
@@ -116,8 +116,8 @@ exports.signin = (req, res) => {
                             })
                             res.status(200).send({
                                 username: req.body.username,
-                                newUser: newUser[usernames.indexOf(req.body.username)],
-                                accessToken: token
+                                newUser: result[0].newUser,
+                                accessToken: token,
                             })
                             
                         }
@@ -155,7 +155,7 @@ exports.fuelInfo = (req, res) => {
                 connection.query(query, function (err, result, fields) {
                     if (err) throw err;
                     res.status(200).send({
-                        data: result
+                        address: result[0].addressOne
                     })
                 })
             }, 2000);
@@ -164,31 +164,15 @@ exports.fuelInfo = (req, res) => {
     })
 }
 exports.fuelquote = (req, res) => {
-    var mysql = require('mysql');
-    var values = "INSERT INTO 'fuel' (`gallons`, `date`, `suggested`, `total`, `username`) VALUES('" + req.body.gallons + "', '" + req.body.date + "', '" + req.body.suggestedPrice + "', '" + req.body.total + "', '" + req.body.username + "')"
+    var values = "INSERT INTO fuel (`gallons`, `date`, `suggested`, `total`, `username`) VALUES('" + req.body.gallons + "', '" + req.body.date + "', '" + req.body.suggestedPrice + "', '" + req.body.total + "', '" + req.body.username + "')"
     pool.getConnection(function (err, connection) {
         if (err) throw err;
-        con.query(values, function (err, result, fields) {
+        connection.query(values, function (err, result, fields) {
             if (err) throw err;
-            console.log(result);
+            console.log("Query was made")
         });
     });
     connection.release();
-/*
-    const index = usernames.indexOf(req.body.username)
-    //if statement is only for when first form is filled out
-    if(!gallonsRequested[index]){
-        gallonsRequested.push([])
-        quoteAddress.push([])
-        deliveryDate.push([])
-        suggestedPrice.push([])
-        totalDue.push([])
-    }
-    gallonsRequested[index].push(req.body.gallons)
-    quoteAddress[index].push(req.body.address)
-    deliveryDate[index].push(req.body.date)
-    suggestedPrice[index].push(req.body.suggested)
-    totalDue[index].push(req.body.total)*/
 }
 
 //find out how to request the address
@@ -203,23 +187,42 @@ exports.profileform = (req, res) => {
         let update = "UPDATE profile SET name = '"+ req.body.Fullname + "', addressOne = '" + req.body.AddressOne + "', addressTwo = '" + req.body.AddressTwo + "', city = '" + req.body.City + "', state = '" + req.body.State + "', zip =  '" + req.body.ZipCode + "', newUser = 0 WHERE username = '" + req.body.username + "'";
         connection.query(update);
         connection.release();
-    }
+    })
 }
 
 exports.getHistory = (req, res) =>{
     const index = usernames.indexOf(req.body.username)
+    console.log("Get history function was called")
 
-    /*
-    Here it is sending the form data that corresponds to the username
-    so if the username is "theusername" index = 0 so all the quoteHIstory will be found
-    in the array of index position 0 of the 2d arrays for each of the data
-    */
-    res.status(200).send({
-        gallons: gallonsRequested[index],
-        address: quoteAddress[index],
-        date: deliveryDate[index],
-        price: suggestedPrice[index],
-        due: totalDue[index]
+    let query = "SELECT * FROM fuel WHERE username = '" + req.body.username + "'"
+
+    pool.getConnection( async function(err, connection) {
+        if(err){
+            res.status(401).send({
+                message: "Failed to connect to database"
+            })
+            return console.error('error:' + err.message)
+        }    
+
+        //must use await and promise to make the program wait for query to finish
+        valid = await new Promise(function(resolve, reject) {
+            setTimeout(function() {
+                connection.query(query, function(err, result, fields){
+                    if (err) throw err;
+                    res.status(200).send({
+                        data: result
+                    })
+                    console.log("History was sent")
+                    if(true){
+                        resolve(true)
+                    }
+                    else{
+                        resolve(false)
+                    }
+                })
+                }, 2000);
+        })
+        connection.release();
     })
 }
 

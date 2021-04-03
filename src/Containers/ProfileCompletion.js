@@ -32,7 +32,7 @@ export default function ProfileCompletion(){
         if(validLength()){
             RegisterForm(FullName, AddressOne, AddressTwo, City, State, ZipCode, username)
             const info = JSON.parse(localStorage.getItem('user'))
-            info.newUser = false
+            info.newUser = 0
             localStorage.setItem("user", JSON.stringify(info))
             history.push("/WelcomePage")
         }
@@ -73,7 +73,7 @@ export default function ProfileCompletion(){
     
     return(
         <div class="Login">
-            {JSON.parse(localStorage.getItem('user')).newUser === false && <NavBar/>}
+            {JSON.parse(localStorage.getItem('user')).newUser === 0 && <NavBar/>}
                 <h2>Profile Management</h2>
             <form class="form" id="forms" onSubmit={handleSubmit}>
                 
