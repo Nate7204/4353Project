@@ -38,7 +38,6 @@ export default function History(){
     useEffect(() => {
         fuelInfo().then(
             () => { 
-                setAddress(localStorage.getItem("address"))
             },
             error => {
                 const resMessage = (
@@ -68,9 +67,11 @@ export default function History(){
                         <tr>{index.total}</tr>
                     ))
                     //using temp to replicate address gallons.length and format address with <tr> 
+                    //using temp2
+                    var temp2 = localStorage.getItem("address")
                     var temp = [];
                     for(var i = 0; i < gallons1.length; i++){
-                        temp[i] = address
+                        temp[i] = temp2
                     }
                     temp = temp.map((index) =>(
                         <tr>{index}</tr>
