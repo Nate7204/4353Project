@@ -1,23 +1,6 @@
 const config = require("../auth/auth.config")
 const mysql = require('mysql')
 
-var usernames = ["user"]
-var passwords = ["password1"]  //temporary variables, will be replaced with DB
-var newUser = [false]
-
-var fullnames = ["thefullname"]
-var addressones = ["addressone"]
-var addresstwos = ["addresstwo"]
-var aCitys = ["thecity"]
-var aStates = ["thestate"]
-var zipcodes = ["zipcode"]
-
-var gallonsRequested = [[0,1]]
-var quoteAddress = [["address", "address two"]]
-var deliveryDate = [["12/31/1999", "1/1/2000"]]
-var suggestedPrice = [[0, 1]]
-var totalDue = [[0, 1]]
-
 var jwt = require("jsonwebtoken")
 var bcrypt = require("bcryptjs")
 
@@ -177,7 +160,6 @@ exports.fuelquote = (req, res) => {
 
 //find out how to request the address
 exports.profileform = (req, res) => {
-    var y = usernames.indexOf(req.body.username);
 
     pool.getConnection( async function(err, connection) {
         if(err){
@@ -191,7 +173,6 @@ exports.profileform = (req, res) => {
 }
 
 exports.getHistory = (req, res) =>{
-    const index = usernames.indexOf(req.body.username)
     console.log("Get history function was called")
 
     let query = "SELECT * FROM fuel WHERE username = '" + req.body.username + "'"
@@ -223,13 +204,5 @@ exports.getHistory = (req, res) =>{
                 }, 2000);
         })
         connection.release();
-    })
-}
-
-exports.getAddress = (req, res) =>{
-    const index = usernames.indexOf(req.body.username)
-
-    res.status(200).send({
-        address: addressones[index]
     })
 }
