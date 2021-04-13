@@ -1,3 +1,5 @@
+To start this project, install Node.js and run command "npm start" to run the front end and in another terminal naviagate to the api folder and run command "node server.js"
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
