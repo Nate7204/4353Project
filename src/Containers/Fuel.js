@@ -6,7 +6,16 @@ import NavBar from "./NavBar"
 import axios from "axios"
 import './Fuel.css'
 class PricingModule {
-    
+    constructor(data, gallons) {
+        this.data = data;
+        this.gallons = gallons;
+    }
+    suggested() {
+        var location = this.data[6] === 'TX' ? .02 : .04;
+        //var historyFactor = history === True ? .1 : 0;
+        var gal = gallons >= 1000 ? .02 : .03;
+        return (location /*- historyFactor*/ + gal + .1) * 1.5;
+    }
 }
 function fuelQuote(gallons, address, date, suggested, total, username) {
     return axios.post("http://localhost:8080/api/auth/fuelQuote", {
