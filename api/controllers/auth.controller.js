@@ -5,7 +5,7 @@ var jwt = require("jsonwebtoken")
 var bcrypt = require("bcryptjs")
 
 let pool = mysql.createPool({
-        connectionLimit: 10,
+        connectionLimit: 100,
         host: '99.77.89.225',
         user: 'root',
         password: '',
@@ -72,13 +72,13 @@ exports.signin = (req, res) => {
             })
             return console.error('error:' + err.message)
         }    
-
+        console.log("got here")
         //must use await and promise to make the program wait for query to finish
         valid = await new Promise(function(resolve, reject) {
             setTimeout(function() {
                 connection.query(query, function(err, result, fields){
                     if (err) throw err;
-
+                    console.log("got here")
                     if(result.length != 0){  //if the username is in the DB
                         var passwordIsValid = bcrypt.compareSync(
                             req.body.password,
@@ -120,10 +120,12 @@ exports.signin = (req, res) => {
         connection.release();
     })
 }
+
 exports.fuelInfo = (req, res) => {
     let valid = true;
     let query = "SELECT * FROM profile WHERE username = '" + req.body.username + "'"
 
+    console.log("fuelinfo function called")
     pool.getConnection(async function (err, connection) {
         if (err) {
             res.status(401).send({
@@ -136,26 +138,31 @@ exports.fuelInfo = (req, res) => {
         valid = await new Promise(function (resolve, reject) {
             setTimeout(function () {
                 connection.query(query, function (err, result, fields) {
+                    connection.release();
                     if (err) throw err;
                     res.status(200).send({
-                        address: result[0].addressOne
+                        data: result[0]
                     })
+                    console.log("fuelinfo sent")
                 })
             }, 2000);
         })
-        connection.release();
+        
     })
 }
 exports.fuelquote = (req, res) => {
-    var values = "INSERT INTO fuel (`gallons`, `date`, `suggested`, `total`, `username`) VALUES('" + req.body.gallons + "', '" + req.body.date + "', '" + req.body.suggestedPrice + "', '" + req.body.total + "', '" + req.body.username + "')"
+    console.log("fuelquote is called")
+
+    var values = "INSERT INTO fuel (`gallons`, `date`, `suggested`, `total`, `username`) VALUES('" + req.body.gallons + "', STR_TO_DATE('" + req.body.date + "','%m/%d/%Y'), '" + req.body.suggested + "', '" + req.body.total + "', '" + req.body.username + "')"
+    
     pool.getConnection(function (err, connection) {
         if (err) throw err;
         connection.query(values, function (err, result, fields) {
             if (err) throw err;
             console.log("Query was made")
-        });
+        });    
     });
-    connection.release();
+    
 }
 
 //find out how to request the address
@@ -176,19 +183,19 @@ exports.getHistory = (req, res) =>{
     console.log("Get history function was called")
 
     let query = "SELECT * FROM fuel WHERE username = '" + req.body.username + "'"
-
     pool.getConnection( async function(err, connection) {
         if(err){
+            console.log("error connecting to database")
             res.status(401).send({
                 message: "Failed to connect to database"
             })
             return console.error('error:' + err.message)
         }    
-
         //must use await and promise to make the program wait for query to finish
-        valid = await new Promise(function(resolve, reject) {
+        await new Promise(function(resolve, reject) {
             setTimeout(function() {
                 connection.query(query, function(err, result, fields){
+                    connection.release();
                     if (err) throw err;
                     res.status(200).send({
                         data: result
@@ -203,6 +210,6 @@ exports.getHistory = (req, res) =>{
                 })
                 }, 2000);
         })
-        connection.release();
+
     })
 }

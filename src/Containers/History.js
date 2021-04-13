@@ -21,7 +21,7 @@ function fuelInfo() {
         username
     }).then(response => {
             if(response.data){
-                localStorage.setItem("address", response.data.address)
+                localStorage.setItem("address", response.data.data.addressOne)
             }
             return response.data
         });
@@ -35,8 +35,8 @@ export default function History(){
     var [amountDues, setAmountDues] = useState();
 
     //useEffect makes it so these functions only get called once even though the page rerenders a few times
-    useEffect(() => {
-        fuelInfo().then(
+    useEffect(async () => {
+        await fuelInfo().then(
             () => { 
             },
             error => {
@@ -51,14 +51,14 @@ export default function History(){
         })
 
         const afunct = async() =>{
-            getHistory().then(
+             await getHistory().then(
                 () => { 
                     var values = JSON.parse(localStorage.getItem("formData"))
                     var gallons1 = values.map((index) =>(
                         <tr>{index.gallons}</tr>
                     ))
                     var dates1 = values.map((index) =>(
-                        <tr>{index.date}</tr>
+                        <tr>{index.date.substring(0,10)}</tr>    //substring removes the time part of date 
                     ))
                     var prices1 = values.map((index) =>(
                         <tr>{index.suggested}</tr>
