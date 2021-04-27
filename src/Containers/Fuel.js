@@ -130,7 +130,7 @@ export default function Fuel(){
                 <p>Suggested Price: {suggested}</p>
                 <p>Total Due: {total}</p>
                 {loading && <p>Loading data please wait</p>}
-                <Button className="quote" block size="lg" disabled={!isNumber(gallons) || !isValidDate(date) || loading} onClick={getQuote}>
+                <Button className="quote" block size="lg" disabled={!isNumber(gallons) || gallons<=0 || !isValidDate(date) || loading} onClick={getQuote}>
                     Get Quote
                 </Button>
                 <Button className="quote" block size="lg" type="submit" disabled={!isNumber(gallons) || !isValidDate(date) || suggested === 0}>
